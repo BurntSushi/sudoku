@@ -1,0 +1,6 @@
+An attempt at a Sudoku solver in Haskell.
+
+For a simple demonstration, run:
+
+  runhaskell Main.hs
+
