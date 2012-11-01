@@ -31,6 +31,20 @@ wikiGapped = grid $ [ "5 3 - - 7 - - - -"
                     , "- - - - 8 - - 7 9"
                     ]
 
+wikiGapped2 :: Grid
+wikiGapped2 = grid $ [ "- - - - - - - 1 -"
+                     , "- - - - - 2 - - 3"
+                     , "- - - 4 - - - - -"
+
+                     , "- - - - - - 5 - -"
+                     , "4 - 1 6 - - - - -"
+                     , "- - 7 1 - - - - -"
+
+                     , "- 5 - - - - 2 - -"
+                     , "- - - - 8 - - 4 -"
+                     , "- 3 - 9 1 - - - -"
+                     ]
+
 wikiAnswered :: Grid
 wikiAnswered = grid $ [ "5 3 4 6 7 8 9 1 2"
                       , "6 7 2 1 9 5 3 4 8"
@@ -56,6 +70,9 @@ main = putStr $
        ++ "\n\n"
        ++ "Our solver\n"
        ++ show (head (improve [wikiGapped]))
+       ++ "\n"
+       ++ "Our solver on a harder problem?  I think not.\n"
+--       ++ concatMap (\ g -> show g ++ "\n\n") (improve [wikiGapped2])
        ++ "\n"
   where solvedStr g = if solved g then "Yes" else "No"
 
