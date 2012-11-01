@@ -46,11 +46,11 @@ wikiAnswered = grid $ [ [5, 3, 4, 6, 7, 8, 9, 1, 2]
 
 main = putStr $
        "Here's our puzzle. Has it been solved?\n"
-       ++ (show wikiGapped)
+       ++ show wikiGapped
        ++ solvedStr wikiGapped
        ++ "\n\n"
        ++ "Is the answer from Wikipedia correct?\n"
-       ++ (show wikiAnswered)
+       ++ show wikiAnswered
        ++ solvedStr wikiAnswered
        ++ "\n"
   where solvedStr g = if solved g then "Yes" else "No"

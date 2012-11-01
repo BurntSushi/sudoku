@@ -59,7 +59,7 @@ sum45 :: [Cell] -> Bool
 sum45 cells = sum45' cells 0
   where sum45' [] sum = sum == 45
         sum45' ((Cell Nothing):_) _ = False
-        sum45' ((Cell (Just c)):cs) sum = sum45' cs (sum + c)
+        sum45' (Cell (Just c):cs) sum = sum45' cs (sum + c)
 
 -- valid returns true if and only if all rows, columns and blocks  contain
 -- either a Nothing value or a unique Just x value where x is in [1, 9]
@@ -72,7 +72,7 @@ valid' cells = valid'' cells S.empty
   where valid'' :: [Cell] -> S.Set Int -> Bool
         valid'' [] _ = True
         valid'' ((Cell Nothing):xs) seen = valid'' xs seen
-        valid'' ((Cell (Just x)):xs) seen =
+        valid'' (Cell (Just x):xs) seen =
           if x `S.member` seen then
             False
           else
