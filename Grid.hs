@@ -1,9 +1,13 @@
-module Grid where
+module Grid 
+  ( Grid(..), Cell(..)
+  , rows, cols, blocks
+  , grid, solved
+  )
+where
 
 import Data.List
 import qualified Data.Set as S
-import Test.QuickCheck.Arbitrary
-import Test.QuickCheck.Gen
+import Test.QuickCheck
 
 -- A Grid is a 9x9 matrix corresponding to a sudoku puzzle. The origin is
 -- the top left corner.
@@ -16,8 +20,8 @@ instance Show Grid where
 instance Arbitrary Grid where
   arbitrary =
     -- Keeps cells in [1..9] but produces invalid grids.
-    fmap Grid $ sequence $ take 9 $ repeat $ vectorOf 9 (arbitrary :: Gen Cell)
-
+    fmap Grid $ sequence $ take 9 $ repeat $ row
+    where row = sequence $ take 9 $ repeat $ arbitrary
 -- A Cell represents a filled or empty cell in a Grid.
 newtype Cell = Cell (Maybe Int) deriving (Eq)
 
