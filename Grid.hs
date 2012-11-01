@@ -71,10 +71,10 @@ valid' cells = valid'' cells S.empty
         valid'' [] _ = True
         valid'' ((Cell Nothing):xs) seen = valid'' xs seen
         valid'' (Cell (Just x):xs) seen =
-          if x `S.member` seen then
-            False
-          else
-            valid'' xs (x `S.insert` seen)
+          case (x `S.member` seen, x < 1 || x > 9) of
+            (True, _) -> False
+            (_, True) -> False
+            (False, False) -> valid'' xs (x `S.insert` seen)
 
 -- Returns all the rows in the grid
 rows :: Grid -> [[Cell]]
