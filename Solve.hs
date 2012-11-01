@@ -1,5 +1,6 @@
 module Solve
-  (
+  ( improve
+  , ep, fp
   )
 where
 
@@ -21,7 +22,8 @@ extend (Grid rows) = map Grid (extendRows rows)
           extendRows [] = error "tried to extend a full grid"
 
           extendRow (Cell Nothing : cells) = [Cell (Just n) : cells | n <- [1..9]]
-          extendRow (c : cells) = [c : cells' | cells' <- extendRow cells]
+          extendRow (c : cells) = map (c:) (extendRow cells)
+          extendRow [] = []
 
 
 
