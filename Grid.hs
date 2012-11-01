@@ -18,10 +18,9 @@ instance Show Grid where
                        $ map (intercalate " | " . (map show)) cells) ++ "\n"
 
 instance Arbitrary Grid where
-  arbitrary =
+  arbitrary = fmap Grid (nine (nine arbitrary))
+     where nine a = sequence $ take 9 $ repeat a
     -- Keeps cells in [1..9] but produces invalid grids.
-    fmap Grid $ sequence $ take 9 $ repeat $ row
-    where row = sequence $ take 9 $ repeat $ arbitrary
 -- A Cell represents a filled or empty cell in a Grid.
 newtype Cell = Cell (Maybe Int) deriving (Eq)
 
