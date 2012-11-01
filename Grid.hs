@@ -2,6 +2,10 @@ module Grid
   ( Grid(..), Cell(..)
   , rows, cols, blocks
   , grid, solved
+  , deadEnd
+  , deadGrid
+  , full, fullCell
+  , numFilled
   )
 where
 
@@ -33,6 +37,20 @@ instance Arbitrary Cell where
     x <- choose (1, 9)
     return $ Cell $ Just x
 
+
+-- | Tell if a grid is completely full
+full :: Grid -> Bool
+full g = all fullRow (rows g)
+    where fullRow = all fullCell
+
+
+-- | Tell if a cell is full
+fullCell :: Cell -> Bool
+fullCell (Cell (Just _)) = True
+fullCell (Cell Nothing)  = False
+
+
+
 -- Returns a grid with all cells empty
 emptyGrid :: Grid
 emptyGrid = Grid $ take 9 $ repeat $ take 9 $ repeat (Cell Nothing)
@@ -62,7 +80,12 @@ sum45 cells = sum45' cells 0
         sum45' ((Cell Nothing):_) _ = False
         sum45' (Cell (Just c):cs) sum = sum45' cs (sum + c)
 
--- valid returns true if and only if all rows, columns and blocks  contain
+-- | @deadGrid@ tells if a grid cannot possibly be completed into a solution
+
+deadGrid :: Grid -> Bool
+deadGrid = not . valid
+
+-- | @valid@ returns true if and only if all rows, columns and blocks  contain
 -- either a Nothing value or a unique Just x value where x is in [1, 9]
 valid :: Grid -> Bool
 valid grid = v (blocks grid) && v (rows grid) && v (cols grid)
@@ -78,6 +101,18 @@ valid' cells = valid'' cells S.empty
             (True, _) -> False
             (_, True) -> False
             (False, False) -> valid'' xs (x `S.insert` seen)
+
+deadEnd :: [Cell] -> Bool
+deadEnd = not . valid'
+
+
+numFilled :: Grid -> Int
+numFilled grid = sum (map row (rows grid))
+    where row = length . filter fullCell
+                 
+                 
+
+
 
 -- Returns all the rows in the grid
 rows :: Grid -> [[Cell]]
