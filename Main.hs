@@ -1,6 +1,7 @@
-module Sudoku where
+module Main where
 
 import Grid
+import Solve
 
 exInvalid :: Grid
 exInvalid = grid $ [ "5 3 3 - 7 - - - -"
@@ -52,6 +53,9 @@ main = putStr $
        ++ "Is the answer from Wikipedia correct?\n"
        ++ show wikiAnswered
        ++ solvedStr wikiAnswered
+       ++ "\n\n"
+       ++ "Our solver\n"
+       ++ show (head (improve [wikiGapped]))
        ++ "\n"
   where solvedStr g = if solved g then "Yes" else "No"
 
