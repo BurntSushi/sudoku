@@ -34,14 +34,14 @@ instance Arbitrary Cell where
 emptyGrid :: Grid
 emptyGrid = Grid $ take 9 $ repeat $ take 9 $ repeat (Cell Nothing)
 
--- Returns a grid given a list of list of ints.
--- Ints that are 0 are treated as Nothing values.
--- Ints that are in [1, 9] are treated as Just x values.
-grid :: [[Int]] -> Grid
-grid cells = Grid $ map (map maybeify) cells
-  where maybeify :: Int -> Cell
-        maybeify 0 = Cell Nothing
-        maybeify x = Cell (Just x)
+-- Returns a grid given a list of strings.
+-- Characters that are "-" are treated as Nothing values.
+-- Characters that are Ints in [1, 9] are treated as Just x values.
+grid :: [String] -> Grid
+grid cells = Grid $ map (map maybeify . filter (/= ' ')) cells
+  where maybeify :: Char -> Cell
+        maybeify '-' = Cell Nothing
+        maybeify x = Cell (Just $ read [x])
 
 -- solved returns true if and only if the grid is valid and all rows, columns 
 -- and blocks sum to 9.
