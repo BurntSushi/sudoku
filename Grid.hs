@@ -2,8 +2,6 @@ module Grid where
 
 import Data.List
 import qualified Data.Set as S
-import Debug.Trace (trace)
-import Test.QuickCheck
 import Test.QuickCheck.Arbitrary
 import Test.QuickCheck.Gen
 
