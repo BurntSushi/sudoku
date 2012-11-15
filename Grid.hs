@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleInstances #-}
 module Grid 
   ( Grid(..), Cell(..)
   , rows, cols, blocks
@@ -9,9 +10,9 @@ module Grid
   )
 where
 
-import Data.List
-import qualified Data.Set as S
-import Test.QuickCheck
+import Data.List hiding (insert)
+import qualified Data.IntSet as S
+-- import Test.QuickCheck 
 
 -- A Grid is a 9x9 matrix corresponding to a sudoku puzzle. The origin is
 -- the top left corner.
@@ -21,9 +22,9 @@ instance Show Grid where
   show (Grid cells) = (intercalate "\n"
                        $ map (intercalate " | " . (map show)) cells) ++ "\n"
 
-instance Arbitrary Grid where
-  arbitrary = fmap Grid (nine (nine arbitrary))
-     where nine a = sequence $ take 9 $ repeat a
+-- instance Arbitrary Grid where 
+  -- arbitrary = fmap Grid (nine (nine arbitrary)) 
+     -- where nine a = sequence $ take 9 $ repeat a 
     -- Keeps cells in [1..9] but produces invalid grids.
 -- A Cell represents a filled or empty cell in a Grid.
 newtype Cell = Cell (Maybe Int) deriving (Eq)
@@ -32,10 +33,10 @@ instance Show Cell where
   show (Cell (Just x)) = show x
   show (Cell Nothing) = "-"
 
-instance Arbitrary Cell where
-  arbitrary = do
-    x <- choose (1, 9)
-    return $ Cell $ Just x
+-- instance Arbitrary Cell where 
+  -- arbitrary = do 
+    -- x <- choose (1, 9) 
+    -- return $ Cell $ Just x 
 
 
 -- | Tell if a grid is completely full
@@ -85,22 +86,39 @@ sum45 cells = sum45' cells 0
 deadGrid :: Grid -> Bool
 deadGrid = not . valid
 
+valid = pvalid
+
 -- | @valid@ returns true if and only if all rows, columns and blocks  contain
 -- either a Nothing value or a unique Just x value where x is in [1, 9]
-valid :: Grid -> Bool
-valid grid = v (blocks grid) && v (rows grid) && v (cols grid)
+pvalid :: Grid -> Bool
+pvalid grid = v (rows grid) && v (cols grid) && v (blocks grid)
   where v = all valid'
 
 valid' :: [Cell] -> Bool
 valid' cells = valid'' cells S.empty
-  where valid'' :: [Cell] -> S.Set Int -> Bool
+  where -- valid'' :: [Cell] -> S.Set Int -> Bool
         valid'' [] _ = True
         valid'' ((Cell Nothing):xs) seen = valid'' xs seen
         valid'' (Cell (Just x):xs) seen =
-          case (x `S.member` seen, x < 1 || x > 9) of
-            (True, _) -> False
-            (_, True) -> False
-            (False, False) -> valid'' xs (x `S.insert` seen)
+          not (x `S.member` seen) && valid'' xs (x `S.insert` seen)
+
+class MySet a where
+  empty :: a
+  member :: Int -> a -> Bool
+  insert :: Int -> a -> a
+
+-- myempty :: S.Set Int 
+-- myempty = S.empty 
+--  
+-- instance MySet (S.Set Int) where 
+  -- empty = S.empty 
+  -- member = S.member 
+  -- insert = S.insert 
+
+inRange :: [Cell] -> Bool
+inRange = all inRangeCell
+  where inRangeCell (Cell Nothing) = False
+        inRangeCell (Cell (Just x)) = x >= 1 && x <= 9 
 
 deadEnd :: [Cell] -> Bool
 deadEnd = not . valid'
@@ -129,6 +147,8 @@ cols g = foldr (\index accum -> (col g index):accum) [] [1..9]
 -- Returns the column at i (indexed 1 through 9)
 col :: Grid -> Int -> [Cell]
 col (Grid cells) i = foldr (\r c -> (r !! (i - 1)):c) [] cells
+
+
 
 -- Returns all of the blocks in the grid.
 blocks :: Grid -> [[Cell]]

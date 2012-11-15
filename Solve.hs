@@ -15,13 +15,16 @@ improve gs = if any full gs then filter full gs
 
 extend :: Grid -> [Grid]
 extend (Grid rows) = map Grid (extendRows rows)
-    where extendRows (row:rows) =
+    where extendRows :: [[Cell]] -> [[[Cell]]]
+          extendRows (row:rows) =
               case extendRow row of
                 [] -> map (row:) (extendRows rows)
                 rows' -> [row:rows | row <- rows']
           extendRows [] = error "tried to extend a full grid"
 
-          extendRow (Cell Nothing : cells) = [Cell (Just n) : cells | n <- [1..9]]
+          extendRow :: [Cell] -> [[Cell]]
+          extendRow (Cell Nothing : cells) =
+            [Cell (Just n) : cells | n <- [1..9]]
           extendRow (c : cells) = map (c:) (extendRow cells)
           extendRow [] = []
 

@@ -31,8 +31,8 @@ superHard = grid $ [ "8 - - - - - - - -"
                    , "- 9 - - - - 4 - -"
                    ]
 
-wikiGapped2 :: Grid
-wikiGapped2 = grid $ [ "- - - - - - - 1 -"
+wikiGapped :: Grid
+wikiGapped = grid $ [ "- - - - - - - 1 -"
                      , "- - - - - 2 - - 3"
                      , "- - - 4 - - - - -"
 
@@ -44,6 +44,20 @@ wikiGapped2 = grid $ [ "- - - - - - - 1 -"
                      , "- - - - 8 - - 4 -"
                      , "- 3 - 9 1 - - - -"
                      ]
+
+wikiGappedEasy :: Grid
+wikiGappedEasy = grid $ [ "5 3 - - 7 - - - -"
+                        , "6 - - 1 9 5 - - -"
+                        , "- 9 8 - - - - 6 -"
+
+                        , "8 - - - 6 - - - 3"
+                        , "4 - - 8 - 3 - - 1"
+                        , "7 - - - 2 - - - 6"
+
+                        , "- 6 - - - - 2 8 -"
+                        , "- - - 4 1 9 - - 5"
+                        , "- - - - 8 - - 7 9"
+                        ]
 
 wikiAnswered :: Grid
 wikiAnswered = grid $ [ "5 3 4 6 7 8 9 1 2"
